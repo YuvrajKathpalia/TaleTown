@@ -11,11 +11,16 @@ const authenticateToken = (req, res, next) => {
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+    if (!decoded || !decoded.user || !decoded.user.id) {
+        return res.status(401).json({ msg: 'Token is not valid' });
+      }
+  
     req.user = decoded.user;
     next();
   } catch (e) {
     console.error('Token verification error:', e);
-    res.status(400).json({ msg: 'Token is not valid, Please SignIn again.' });
+    res.status(401).json({ msg: 'Token is not valid, Please SignIn again.' });
   }
 };
 

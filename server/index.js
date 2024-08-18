@@ -23,14 +23,18 @@ mongoose.connect(uri)
   });
 
   const authRoutes = require('./routes/authentication');
-
+  const bookRoutes = require('./routes/book');
+  const userRoutes = require('./routes/users');
+  
 
   app.use('/api/auth', authRoutes);
-
+  app.use('/api/auth/' , bookRoutes);
+  app.use('/api/auth/' , userRoutes);
+  
   console.log("MONGO_URI:", process.env.MONGO_URI);
   console.log("JWT_SECRET:", process.env.JWT_SECRET);
   
-  const port = process.env.PORT || 2000;
+  const port = process.env.PORT || 3000;
 
   app.listen(port, () => {
     console.log(`Server running on port ${port}`);
