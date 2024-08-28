@@ -6,7 +6,7 @@ const { authenticateToken } = require('../middleware/Auth');
 
 
 
-router.post('/add-to-favourites/:bookId', authenticateToken, async (req, res) => {
+router.put('/add-to-favourites/:bookId', authenticateToken, async (req, res) => {
 
   try {
     const { bookId } = req.params;
@@ -41,7 +41,7 @@ router.post('/add-to-favourites/:bookId', authenticateToken, async (req, res) =>
 });
 
 
-router.delete('/remove-from-favourites/:bookId', authenticateToken, async (req, res) => {
+router.put('/remove-from-favourites/:bookId', authenticateToken, async (req, res) => {
     try {
       const { bookId } = req.params;
       const userId = req.user.id;

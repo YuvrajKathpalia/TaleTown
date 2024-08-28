@@ -9,14 +9,14 @@ user: {
 },
 
 book: {
-    type: mongoose.Types.Objectid,
+    type: mongoose.Types.ObjectId,
     ref: "books",
 },
 
 status: {
     type: String,
     default: "Order Placed",
-    enum: ["Order Placed", "Out for delivery, Delivered, Cancelled"],
+    enum: ["Order Placed", "Out for delivery", "Delivered", "Cancelled"],
    },
  },
  { timestamps: true }

@@ -25,11 +25,14 @@ mongoose.connect(uri)
   const authRoutes = require('./routes/authentication');
   const bookRoutes = require('./routes/book');
   const userRoutes = require('./routes/users');
-  
+  const cartRoutes = require('./routes/cart');
+  const orderRoutes = require('./routes/order');
 
   app.use('/api/auth', authRoutes);
   app.use('/api/auth/' , bookRoutes);
   app.use('/api/auth/' , userRoutes);
+  app.use('/api/auth/' , cartRoutes);
+  app.use('/api/auth/' , orderRoutes);
   
   console.log("MONGO_URI:", process.env.MONGO_URI);
   console.log("JWT_SECRET:", process.env.JWT_SECRET);

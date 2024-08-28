@@ -37,6 +37,12 @@ const UserSchema = new mongoose.Schema({
         ref: "order",
     },
   ],
+  cart:[
+    {
+      type:mongoose.Types.ObjectId,
+      ref: "book",
+    },
+  ],
 },
 {timestamps:true}
 );
