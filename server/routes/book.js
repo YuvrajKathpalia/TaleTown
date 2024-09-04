@@ -112,5 +112,18 @@ router.put('/update-book/:id', authenticateToken, async (req, res) => {
       res.status(500).json({ message: 'Internal server error' });
     }
   });
+
+
+  router.get('/get-recent-books', async (req, res) => {
+    try {
+      const books = await Book.find().sort({createdAt:-1});
+      res.status(200).json(books);
+    } 
+    catch (error) {
+      console.error('Error retrieving books:', error);
+      res.status(500).json({ message: 'Internal server error' });
+    }
+  });
+
   
 module.exports = router;
