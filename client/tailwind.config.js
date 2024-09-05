@@ -9,6 +9,8 @@ export default {
       fontFamily: {
         roboto: ['Roboto', 'sans-serif'],
         openSans: ['Open Sans', 'sans-serif'],
+        merriweatherSans: ['Merriweather Sans', 'sans-serif'],
+        
       },
     },
   },

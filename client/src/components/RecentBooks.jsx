@@ -21,9 +21,9 @@ const RecentBooks = () => {
   return (
     <div className="p-8">
       <h2 className="text-3xl font-bold mb-6 text-blue-500 ml-5">Recently Added Books</h2>
-      <div className="grid sm:grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
+      <div className="ml-12 grid sm:grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
 
-        {books.map(book => (
+      {books.slice(0, 4).map(book => (
           <BookCard key={book._id} book={book} />
         ))}
       </div>
