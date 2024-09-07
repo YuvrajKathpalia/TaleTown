@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom'; 
 import loader from '../assets/images/loader.gif'; 
+import { FaGlobe } from 'react-icons/fa';
 
 const BookDetails = () => {
   const { id } = useParams(); 
@@ -47,13 +48,31 @@ const BookDetails = () => {
   }
 
   return (
-    <div className="p-8">
-      <h2 className="text-3xl font-bold ">{book.title}</h2>
-      <div className="ml-12">
-        <p>Author {book.author}</p>
-        <p>Price: {book.price ? `$${book.price}` : 'Price not available'}</p>
-        <p>Description {book.description}</p>
-        <img src={book.url} alt={book.title} />
+    <div className="h-[calc(100vh-60px)] w-screen bg-white flex gap-12 p-12 items-center justify-center">
+      
+      <div className="flex-shrink-0">
+        <img
+          src={book.url}
+          alt={book.title}
+          className="w-[260px] h-[380px] object-contain" 
+        />
+      </div>
+
+    {/* book details... */}
+      <div className="w-2/5 mt-[-50px]">
+        <h1 className="text-5xl font-bold text-black font-serif mb-4">{book.title}</h1> 
+        <p className="text-xl text-gray-800 italic mb-6 font-merriweatherSans">By {book.author}</p> 
+        
+        <p className="text-lg text-gray-600 mb-8 font-sans">{book.description || 'No description available.'}</p> 
+
+        <div className="flex items-center gap-2 mt-4">
+          <FaGlobe className="text-gray-600" /> 
+          <p className="text-lg text-gray-600">{book.language || 'Language not specified'}</p>
+        </div>
+        
+        <p className="mt-4 text-3xl font-semibold text-gray-800">
+          Price: {book.price ? `$${book.price}` : 'Price not available'}
+        </p>
       </div>
     </div>
   );

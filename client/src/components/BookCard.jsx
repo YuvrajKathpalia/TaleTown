@@ -14,7 +14,7 @@ const BookCard = ({ book }) => {
     <div className="relative w-80 h-30 flex flex-col items-center overflow-hidden m-0 pt-8 bg-white border border-gray-300
                     transition-transform duration-300 ease-in-out hover:scale-110 hover:shadow-lg"
                     onClick={handleClick}>
-\
+
     <div className="w-full h-48 bg-gray-100 overflow-hidden rounded-t-lg ">
       <img
         src={book.url} 
