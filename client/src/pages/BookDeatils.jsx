@@ -1,15 +1,20 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom'; 
+import { useParams ,useNavigate } from 'react-router-dom'; 
 import loader from '../assets/images/loader.gif'; 
-import { FaGlobe } from 'react-icons/fa';
+import { FaGlobe  } from 'react-icons/fa';
 
 const BookDetails = () => {
-  const { id } = useParams(); 
+  const { id } = useParams();
+  const navigate= useNavigate(); 
   console.log(id);
 
   const [book, setBook] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
+  const [isFavorited, setIsFavorited] = useState(false); 
+  const [isInCart, setIsInCart] = useState(false); 
+
+  const token = localStorage.getItem('token');
 
   useEffect(() => {
     const fetchBook = async () => {
@@ -20,6 +25,10 @@ const BookDetails = () => {
         }
         const data = await response.json();
         setBook(data);
+
+        setIsFavorited(data.isFavorited); 
+        setIsInCart(data.isInCart);
+       
       } catch (error) {
         console.error('Error retrieving the book:', error);
         setError(true);
@@ -30,6 +39,65 @@ const BookDetails = () => {
 
     fetchBook();
   }, [id]); //refetch when id changes..
+
+
+  const handleAddToFavorites = async () => {
+    try {
+      const response = await fetch(`http://localhost:2000/api/auth/add-to-favourites/${id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+      });
+  
+      const responseBody = await response.json();
+  
+    
+      console.log('Response Status:', response.status);
+      console.log('Response Body:', responseBody);
+  
+      if (response.status === 400) {
+        alert('Book already in favorites');
+        return; 
+      }
+  
+      if (!response.ok) {
+        throw new Error('Failed to add to favorites');
+      }
+  
+      alert('Book added to favorites!');
+      setIsFavorited(true); 
+    } 
+    catch (error) {
+      console.error('Error adding to favorites:', error);
+      alert('Failed to add to favorites.');
+    }
+  };
+  
+  
+  const handleAddToCart = async () => {
+    try {
+      const response = await fetch(`http://localhost:2000/api/auth/add-to-cart/${id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to add to cart');
+      }
+
+      navigate('/cart');
+      setIsInCart(true);
+    }
+     catch (error) {
+      console.error('Error adding to cart:', error);
+      alert('Failed to add to cart.');
+    }
+  };
 
   if (loading) {
     return (
@@ -73,6 +141,23 @@ const BookDetails = () => {
         <p className="mt-4 text-3xl font-semibold text-gray-800">
           Price: {book.price ? `$${book.price}` : 'Price not available'}
         </p>
+
+
+        <div className="flex gap-4 mt-9">
+          <button
+            onClick={handleAddToFavorites}
+            className="bg-black text-white py-2 px-6 rounded hover:bg-red-500 w-56"
+          >
+            Add to Favorites
+          </button>
+          <button
+            onClick={handleAddToCart}
+            className="bg-black text-white py-2 px-6 rounded hover:bg-blue-500 w-56"
+          >
+            Add to Cart
+          </button>
+        </div>
+
       </div>
     </div>
   );
