@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 
 export default function Favorites() {
   const [favorites, setFavorites] = useState([]);
@@ -52,8 +53,9 @@ export default function Favorites() {
       
       <div className="grid gap-16 grid-cols-auto-fit sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 justify-items-center">
         {favorites.map((book) => (
-          <div
+          <Link
             key={book._id}
+            to= {`/get-book-details/${book._id}`}
             className="relative w-72 h-[34rem] flex flex-col items-center overflow-hidden bg-white border border-gray-300 shadow-md transition-transform duration-300 ease-in-out hover:scale-105"
           >
             <div className="bg-white overflow-hidden rounded-t-lg">
@@ -68,7 +70,7 @@ export default function Favorites() {
               <p className="text-gray-700 italic mb-1 truncate">By {book.author}</p>
               <p className="text-gray-600">{book.price ? `$${book.price}` : 'Price not available'}</p>
             </div>
-          </div>
+          </Link>
         ))}
       </div>
     </div>
