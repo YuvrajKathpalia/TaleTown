@@ -18,6 +18,7 @@ const SignUp = ({ onClose }) => {
     });
   };
 
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -46,7 +47,7 @@ const SignUp = ({ onClose }) => {
   };
 
   const handleClose = () => {
-    if (onClose) onClose();
+    navigate('/'); 
   };
 
   return (
