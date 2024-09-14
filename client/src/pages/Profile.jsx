@@ -1,73 +1,134 @@
-import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
+import avatar from '../assets/images/avatar.png';
 
-const Profile = () => {
-  const [userInfo, setUserInfo] = useState(null);
+export default function Profile() {
+
+  const [user, setUser] = useState({});
+  const [favorites, setFavorites] = useState([]);
+  const [activeTab, setActiveTab] = useState('favorites');
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
-  const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchUserInfo = async () => {
-      const token = localStorage.getItem('token');
-      if (!token) {
-        navigate('/signin'); 
-        return;
-      }
-  
+    const fetchData = async () => {
       try {
-        const response = await fetch('http://localhost:2000/api/auth/get-user-info', {
+        const userResponse = await fetch('http://localhost:2000/api/auth/get-user-info', {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`, //authorization header me token bhejdia..middleware nikal lega aur authenticated h ya ni check krlega jwt se, aur fir response bhejega
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
           },
         });
-  
-        if (!response.ok) {
-          const errorData = await response.json(); 
-          throw new Error(errorData.message || 'Server error');
-        }
+        const userData = await userResponse.json();
+        setUser(userData);
 
-        const data = await response.json();
-        setUserInfo(data);
+        const favoriteResponse = await fetch('http://localhost:2000/api/auth/get-favourite-books', {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+          },
+        });
+        const favoriteData = await favoriteResponse.json();
+        setFavorites(favoriteData);
+
       } catch (error) {
-        setError(error.message);
-        console.error('Error fetching user info:', error);
+        setError('Failed to load data');
+      } finally {
+        setLoading(false);
       }
     };
-  
-    fetchUserInfo();
-  }, [navigate]);
 
-  const handleLogout = () => {
-    localStorage.removeItem('token');
-    navigate('/signin');
-  };
+    fetchData();
+  }, []);
+
+  if (loading) {
+    return <div className="flex items-center justify-center min-h-screen">Loading...</div>;
+  }
+
+  if (error) {
+    return <div className="flex items-center justify-center min-h-screen text-red-500">Error: {error}</div>;
+  }
+
+  const handleTabSwitch = (tab) => setActiveTab(tab);
 
   return (
-    <div className="flex justify-center items-center h-screen bg-gray-100">
-      <div className="bg-white p-8 rounded-lg shadow-lg max-w-md w-full">
-        <h2 className="text-2xl font-bold mb-4">Profile</h2>
-        {error && <p className="text-red-500 mb-4">{error}</p>}
-        {userInfo ? (
-          <div>
-            <p className="text-gray-700"><strong>Username:</strong> {userInfo.username}</p>
-            <p className="text-gray-700"><strong>Email:</strong> {userInfo.email}</p>
-            <p className="text-gray-700"><strong>Address:</strong> {userInfo.address}</p>
-          </div>
-        ) : (
-          <p className="text-gray-700">Loading...</p>
-        )}
+    <div className="min-h-screen bg-gray-100 flex">
+
+      {/* sidebar */}
+      <div className="w-64 bg-white rounded-lg shadow-lg p-6 mt-10 ml-10 flex flex-col items-center h-fit">
+        <div className="text-center mb-8">
+          <img
+            src={avatar} 
+            alt="Avatar"
+            className="w-20 h-20 rounded-full mb-4" 
+          />
+          <h2 className="text-xl font-semibold">{user.username}</h2>
+        </div>
         <button
-          onClick={handleLogout}
-          className="mt-4 w-full px-4 py-2 bg-red-500 text-white font-semibold rounded-md shadow-lg hover:bg-red-600 transition-all duration-300"
+          onClick={() => handleTabSwitch('favorites')}
+          className={`w-full text-left px-4 py-2 mb-4 ${activeTab === 'favorites' ? 'bg-blue-100 text-blue-800' : 'text-gray-700'} hover:bg-blue-50 rounded`}
         >
-          Logout
+          Favorites
         </button>
+        <button
+          onClick={() => handleTabSwitch('orders')}
+          className={`w-full text-left px-4 py-2 mb-4 ${activeTab === 'orders' ? 'bg-blue-100 text-blue-800' : 'text-gray-700'} hover:bg-blue-50 rounded`}
+        >
+          Orders
+        </button>
+        <button
+          onClick={() => handleTabSwitch('cart')}
+          className={`w-full text-left px-4 py-2 mb-4 ${activeTab === 'cart' ? 'bg-blue-100 text-blue-800' : 'text-gray-700'} hover:bg-blue-50 rounded`}
+        >
+          Cart
+        </button>
+        <button
+          onClick={() => handleTabSwitch('settings')}
+          className={`w-full text-left px-4 py-2 mb-4 ${activeTab === 'settings' ? 'bg-blue-100 text-blue-800' : 'text-gray-700'} hover:bg-blue-50 rounded`}
+        >
+          Settings
+        </button>
+      </div>
+
+      {/* main..*/}
+      <div className="flex-grow bg-white p-8 m-10 rounded-lg shadow-lg">
+
+        {/* tabs.. */}
+
+        {activeTab === 'favorites' && (
+
+          <div className="min-h-screen bg-white py-8 px-12">
+            <div className="grid gap-16 grid-cols-1 lg:grid-cols-3 justify-items-center">
+            {favorites.map((book) => (
+                <Link
+                  key={book._id}
+                  to={`/get-book-details/${book._id}`}
+                  className="relative w-56 h-[22rem] flex flex-col items-center overflow-hidden bg-white border border-gray-300 shadow-md transition-transform duration-300 ease-in-out hover:scale-105"
+                >
+                  <div className="bg-white overflow-hidden rounded-t-lg">
+                    <img
+                      src={book.url}
+                      alt={book.title}
+                      className="mt-4 w-full h-48 object-contain"
+                    />
+                  </div>
+                  <div className="p-4 flex flex-col h-1/3">
+                    <h3 className="text-lg font-semibold mb-1 truncate">{book.title}</h3>
+                    <p className="text-gray-700 italic mb-1 truncate">By {book.author}</p>
+                    <p className="text-gray-600">{book.price ? `$${book.price}` : 'Price not available'}</p>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {activeTab === 'orders' && <h3 className="text-xl font-semibold">Orders</h3>}
+        {activeTab === 'cart' && <h3 className="text-xl font-semibold">Cart</h3>}
+        {activeTab === 'settings' && <h3 className="text-xl font-semibold">Settings</h3> }
       </div>
     </div>
   );
-};
-
-export default Profile;
-
+}
