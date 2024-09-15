@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link,useNavigate } from 'react-router-dom';
 import avatar from '../assets/images/avatar.png';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faRightFromBracket } from '@fortawesome/free-solid-svg-icons';
 
 export default function Profile() {
 
@@ -9,6 +11,13 @@ export default function Profile() {
   const [activeTab, setActiveTab] = useState('favorites');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    localStorage.removeItem('token'); 
+    navigate('/'); 
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -89,6 +98,13 @@ export default function Profile() {
           className={`w-full text-left px-4 py-2 mb-4 ${activeTab === 'settings' ? 'bg-blue-100 text-blue-800' : 'text-gray-700'} hover:bg-blue-50 rounded`}
         >
           Settings
+        </button>
+        <button
+          onClick={handleLogout}
+          className="w-full flex items-center px-1 py-2 mb-2 text-red-600 hover:bg-red-50 rounded"
+        >
+          <FontAwesomeIcon icon={faRightFromBracket} className="mr-2" />
+          Logout
         </button>
       </div>
 
