@@ -85,15 +85,26 @@ const BookDetails = () => {
           Authorization: `Bearer ${token}`,
         },
       });
-
+  
+      const responseBody = await response.json();
+  
+      console.log('Response Status:', response.status);
+      console.log('Response Body:', responseBody);
+  
+      
+      if (response.status === 400) {
+        alert('Book already in cart');
+        return;
+      }
+  
       if (!response.ok) {
         throw new Error('Failed to add to cart');
       }
-
-      navigate('/cart');
+  
+      alert('Book added to cart!');
       setIsInCart(true);
-    }
-     catch (error) {
+      navigate('/cart'); 
+    } catch (error) {
       console.error('Error adding to cart:', error);
       alert('Failed to add to cart.');
     }
