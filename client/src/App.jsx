@@ -9,7 +9,7 @@ import Cart from './components/Cart';
 import SignIn from './pages/SignIn'; 
 import SignUp from './pages/Signup';
 import Profile from './pages/Profile';
-import BookDeatils from './pages/BookDeatils';
+import BookDeatils from './pages/BookDetails';
 
 const App = () => {
   return (

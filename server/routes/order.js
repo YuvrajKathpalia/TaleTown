@@ -2,7 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose'); 
 const Order = require('../models/order'); 
 const User = require('../models/Users'); 
-const { authenticateToken } = require('../middleware/Auth');
+const { authenticateToken , authorizeAdmin } = require('../middleware/Auth');
 
 const router = express.Router();
 
@@ -11,7 +11,7 @@ router.post('/place-order', authenticateToken, async (req, res) => {
   try {
     const userId = req.user.id;
     const orders = req.body.orders;
-    const total = req.body.total;
+
 
     console.log("Request body:", req.body);
 
@@ -90,16 +90,17 @@ router.get('/order-history', authenticateToken, async (req, res) => {
 
 // get all orderss(admin)..
 
-router.get('/get-all-orders', authenticateToken,  async (req, res) => {
+router.get('/get-all-orders', authenticateToken, authorizeAdmin,  async (req, res) => {
   try {
-    
+
     const orders = await Order.find()
       .populate({
-        path: 'book',
+        path: 'orders.book',
         model: 'book'
       })
       .populate({
         path: 'user', 
+        select: 'username email address role'
       })
       .sort({ createdAt :-1});
 
@@ -116,12 +117,15 @@ router.get('/get-all-orders', authenticateToken,  async (req, res) => {
 
 //update ordr status of a order id..(admin).
 
-router.put('/update-status/:id', authenticateToken,  async (req, res) => {
+router.put('/update-status/:id', authenticateToken,authorizeAdmin, async (req, res) => {
   try {
     const orderId = req.params.id;
     const { status } = req.body; 
 
-    
+    if (req.user.role !== 'admin') {
+      return res.status(403).json({ message: 'Access denied' });
+    }
+
     const validStatuses = ['Order Placed', 'Out for delivery', 'Delivered', 'Cancelled'];
     if (!validStatuses.includes(status)) {
       return res.status(400).json({ message: 'Invalid status' });

@@ -11,6 +11,8 @@ const authenticateToken = (req, res, next) => {
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
+    console.log('Decoded token:', decoded); 
+
     if (!decoded || !decoded.user || !decoded.user.id) {
       return res.status(401).json({ msg: 'Token is not valid' });
     }
@@ -28,4 +30,19 @@ const authenticateToken = (req, res, next) => {
   }
 };
 
-module.exports = { authenticateToken };
+const authorizeAdmin = (req, res, next) => {
+  // Check if the token is present and decoded
+  if (!req.user) {
+    return res.status(403).json({ msg: 'Access denied: no user found' });
+  }
+  
+  if (req.user.role !== 'admin') {
+    return res.status(403).json({ msg: 'Access denied: you are not an admin' });
+  }
+  
+ //else proceed to next api.
+  next();
+};
+
+
+module.exports = { authenticateToken, authorizeAdmin };

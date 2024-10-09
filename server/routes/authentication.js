@@ -34,6 +34,7 @@ router.post('/signup', async (req, res) => {
     const payload = {
       user: {
         id: user.id,
+        role:user.role,
       },
     };
 
@@ -69,6 +70,7 @@ router.post('/login', async (req, res) => {
     const payload = {
       user: {
         id: user.id,
+        role: user.role,
       },
     };
 
