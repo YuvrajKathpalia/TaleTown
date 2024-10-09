@@ -21,13 +21,20 @@ const SignIn = () => {
 
       const data = await response.json();
 
-      if (!response.ok) {
-        throw new Error(data.message || 'Sign In failed');
+      if (response.status === 403) {
+        // Handle expired token scenario..
+        throw new Error('Session expired. Please log in again.');
       }
 
-      // Store the token and navigate to the profile page
+      if (!response.ok) {
+        throw new Error(data.msg || 'Sign In failed');
+      }
 
+      // Store the token and user id in local storage
       localStorage.setItem('token', data.token);
+      localStorage.setItem('userId', data.id); 
+      console.log("User ID stored:", data.id); 
+    
       navigate('/profile');
     } 
     catch (error) {
@@ -36,11 +43,11 @@ const SignIn = () => {
     }
   };
 
+  
   return (
     <div className="flex justify-center items-center h-screen bg-gray-100">
       <div className="bg-white p-8 rounded-lg shadow-lg max-w-md w-full">
         <h2 className="text-2xl font-bold mb-4">Sign In</h2>
-
 
         <form onSubmit={handleSubmit}>
           <div className="mb-4">

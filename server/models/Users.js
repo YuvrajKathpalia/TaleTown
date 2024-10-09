@@ -17,34 +17,38 @@ const UserSchema = new mongoose.Schema({
   },
   address: {
     type: String,
-    required:true,
+    required: true,
   },
   role: {
-    type:String,
-    default:"user",
-    enum: ["user" , "admin"],
-  }, 
-
-  favourites:[
+    type: String,
+    default: "user",
+    enum: ["user", "admin"],
+  },
+  favourites: [
     {
-      type:mongoose.Types.ObjectId,
+      type: mongoose.Types.ObjectId,
       ref: "book",
     },
   ],
-  orders : [
+  orders: [
     {
-        type: mongoose.Types.ObjectId,
-        ref: "order",
+      type: mongoose.Types.ObjectId,
+      ref: "order",
     },
   ],
-  cart:[
+  cart: [
     {
-      type:mongoose.Types.ObjectId,
-      ref: "book",
-    },
+      book: { type: mongoose.Types.ObjectId, ref: "book" },
+      quantity: { type: Number, required: true, default: 1 }
+    }
   ],
-},
-{timestamps:true}
-);
+  savedBooks: [ 
+    {
+      book: { type: mongoose.Types.ObjectId, ref: "book" },
+      dateSaved: { type: Date, default: Date.now }
+    }
+  ],
+}, { timestamps: true });
 
-module.exports = mongoose.model('user', UserSchema); 
+module.exports = mongoose.model('user', UserSchema);
+
