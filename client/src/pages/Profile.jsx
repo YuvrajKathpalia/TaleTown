@@ -544,35 +544,43 @@ const Profile = () => {
             </div>
           )}
   
-          {activeTab === 'orders' && (
-            <div className="min-h-screen bg-white py-8 px-12">
-              <h2 className="text-3xl font-bold mb-6">Order History</h2>
-              {orderHistory.length === 0 ? (
-                <p className="text-gray-600 text-lg">You have no orders yet.</p>
-              ) : (
-                <div>
-                  {orderHistory.map((order) => (
-                    <div key={order._id} className="mb-6 p-4 border border-gray-200 rounded-lg">
-                      <h3 className="text-lg font-semibold">Order #{order._id}</h3>
-                      <p className="text-sm text-gray-600">Date: {new Date(order.createdAt).toLocaleDateString()}</p>
-                      <h4 className="text-md font-bold mt-2">Items:</h4>
-                      {order.items.map((item) => (
-                        <div key={item.book._id} className="flex justify-between items-center mb-2">
-                          <span>{item.book.title} (x{item.quantity})</span>
-                          <span>${(item.price * item.quantity).toFixed(2)}</span>
-                        </div>
-                      ))}
-                      <div className="flex justify-between items-center">
-                        <span className="font-semibold">Total Amount:</span>
-                        <span className="text-xl font-bold">${order.totalAmount.toFixed(2)}</span>
-                      </div>
-                    </div>
-                  ))}
+  {activeTab === 'orders' && (
+  <div className="min-h-screen bg-white py-8 px-12">
+    <h2 className="text-3xl font-bold mb-6">Order History</h2>
+    {orderHistory.length === 0 ? (
+      <p className="text-gray-600 text-lg">No orders found.</p>
+    ) : (
+      <div className="grid gap-8">
+        {orderHistory.map((order) => {
+          // Calculate total amount for the current order
+          const totalAmount = order.orders.reduce((total, item) => total + (item.price * item.quantity), 0);
+
+          return (
+            <div key={order._id} className="bg-gray-50 p-6 rounded-lg shadow-md border border-gray-200">
+              <h3 className="text-lg font-semibold mb-2">
+                Order placed on <span className="text-gray-600">{new Date(order.createdAt).toLocaleDateString()}</span>
+              </h3>
+              {order.orders.map((item) => (
+                <div key={item.book._id} className="flex justify-between items-center mb-4 border-b border-gray-300 pb-2">
+                  <div>
+                    <p className="text-md font-semibold">{item.book.title}</p>
+                    <p className="text-sm text-gray-600">By {item.book.author}</p>
+                    <p className="text-sm text-gray-600">Price: ${item.price.toFixed(2)}</p>
+                    <p className="text-sm text-gray-600">Quantity: {item.quantity}</p>
+                  </div>
                 </div>
-              )}
+              ))}
+              <p className="text-lg font-semibold mt-2">
+                Total Amount: <span className="text-blue-600">${totalAmount.toFixed(2)}</span>
+              </p>
             </div>
-          )}
-  
+          );
+        })}
+      </div>
+    )}
+  </div>
+)}
+
           {/* settings */}
           {activeTab === 'settings' && (
             <div className="min-h-screen bg-white py-8 px-12">
