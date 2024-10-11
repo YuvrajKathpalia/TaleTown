@@ -28,7 +28,7 @@ const Books = () => {
   }, []);
 
   return (
-    <div className="p-8 mt-8">
+    <div className="p-8 bg-gradient-to-r from-purple-200 via-blue-200 to-indigo-200">
 
       {loading && (
         <div className="flex items-center justify-center min-h-[200px]">
@@ -45,7 +45,7 @@ const Books = () => {
 
      
       {!loading && !error && (
-        <div className="ml-12 grid sm:grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        <div className="ml-12 grid sm:grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-10">
           {books.length > 0 ? (
             books.map(book => (
               <BookCard key={book._id} book={book} />

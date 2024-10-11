@@ -10,7 +10,7 @@ import SignIn from './pages/SignIn';
 import SignUp from './pages/Signup';
 import Profile from './pages/Profile';
 import BookDeatils from './pages/BookDetails';
-
+import UpdateBook from './components/UpdateBook';
 const App = () => {
   return (
     <Router>
@@ -25,6 +25,7 @@ const App = () => {
         <Route path="/signup" element={<SignUp/>} /> 
         <Route path="/profile" element={<Profile/>} /> 
         <Route path="/get-book-details/:id" element={<BookDeatils/>} /> 
+        <Route path="/update-book/:id" element={<UpdateBook />} />
       
         
       </Routes>

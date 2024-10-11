@@ -33,7 +33,9 @@ const SignIn = () => {
       // Store the token and user id in local storage
       localStorage.setItem('token', data.token);
       localStorage.setItem('userId', data.id); 
-      console.log("User ID stored:", data.id); 
+      localStorage.setItem('role', data.role); 
+      console.log("role-:", data.role); 
+    
     
       navigate('/profile');
     } 

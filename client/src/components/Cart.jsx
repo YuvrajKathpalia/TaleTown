@@ -278,99 +278,101 @@
     }
 
     return (
-      <div className="flex p-8">
+      <div className="min-h-screen bg-gradient-to-r from-purple-200 via-blue-200 to-indigo-200 p-8">
+        <div className="flex">
           <div className="w-3/5 pr-6">
-              <h1 className="text-3xl font-semibold mb-6">Your Cart</h1>
-              {cartBooks.length === 0 ? (
-                  <p>Your cart is empty.</p>
-              ) : (
-                  <div className="space-y-6">
-                      {cartBooks.map((item) => {
-                          const book = item.book;
-                          return (
-                              <div key={item._id} className="bg-white p-4 rounded shadow-md flex flex-col h-65">
-                                  {book ? (
-                                      <div className="flex items-start">
-                                          <img
-                                              src={book.url}
-                                              alt={book.title}
-                                              className="w-32 h-30 object-cover mr-3"
-                                          />
-                                          <div className="flex-grow">
-                                              <h2 className="text-xl font-bold">{book.title}</h2>
-                                              <p className="text-gray-700">By {book.author}</p>
-                                              <p className="text-gray-600 mt-2">${(book.price || 0).toFixed(2)}</p>
-                                              <div className="flex items-center mt-4">
-                                                  <button onClick={() => handleQuantityChange(book._id, -1)} className="bg-gray-200 px-2 py-1 rounded">-</button>
-                                                  <span className="mx-2">{item.quantity}</span>
-                                                  <button onClick={() => handleQuantityChange(book._id, 1)} className="bg-gray-200 px-2 py-1 rounded">+</button>
-                                              </div>
-                                              <div className="flex mt-4 space-x-2">
-                                                  <button onClick={() => handleRemove(book._id)} className="bg-red-500 text-white px-4 py-1 rounded">Remove</button>
-                                                  <button onClick={() => handleSaveForLater(book._id)} className="bg-teal-600 text-white px-4 py-1 rounded">Save for Later</button>
-                                              </div>
-                                          </div>
-                                      </div>
-                                  ) : null}
-                              </div>
-                          );
-                      })}
-                  </div>
-              )}
-
-              {savedBooks.length > 0 && (
-                  <div className="mt-8">
-                      <h1 className="text-3xl font-semibold mb-6">Saved for Later</h1>
-                      <div className="space-y-6">
-                          {savedBooks.map((item) => {
-                              const book = item.book;
-                              return (
-                                  <div key={item._id} className="bg-white p-4 rounded shadow-md flex flex-col">
-                                      {book ? (
-                                          <div className="flex items-start">
-                                              <img
-                                                  src={book.url}
-                                                  alt={book.title}
-                                                  className="w-32 h-30 object-cover mr-4"
-                                              />
-                                              <div className="flex-grow">
-                                                  <h2 className="text-xl font-bold">{book.title}</h2>
-                                                  <p className="text-gray-700">By {book.author}</p>
-                                                  <p className="text-gray-600 mt-2">${(book.price || 0).toFixed(2)}</p>
-                                                  <button onClick={() => handleMoveToCart(book._id)} className="bg-orange-500 text-white px-4 py-1 rounded mt-6">Move to Cart</button>
-                                              </div>
-                                          </div>
-                                      ) : null}
-                                  </div>
-                              );
-                          })}
+            <h1 className="text-3xl font-semibold mb-6">Your Cart</h1>
+            {cartBooks.length === 0 ? (
+              <p>Your cart is empty.</p>
+            ) : (
+              <div className="space-y-6">
+                {cartBooks.map((item) => {
+                  const book = item.book;
+                  return (
+                    <div key={item._id} className="bg-white p-4 rounded shadow-md flex flex-col h-65">
+                      {book ? (
+                        <div className="flex items-start">
+                          <img
+                            src={book.url}
+                            alt={book.title}
+                            className="w-32 h-30 object-cover mr-3"
+                          />
+                          <div className="flex-grow">
+                            <h2 className="text-xl font-bold">{book.title}</h2>
+                            <p className="text-gray-700">By {book.author}</p>
+                            <p className="text-gray-600 mt-2">${(book.price || 0).toFixed(2)}</p>
+                            <div className="flex items-center mt-4">
+                              <button onClick={() => handleQuantityChange(book._id, -1)} className="bg-gray-200 px-2 py-1 rounded">-</button>
+                              <span className="mx-2">{item.quantity}</span>
+                              <button onClick={() => handleQuantityChange(book._id, 1)} className="bg-gray-200 px-2 py-1 rounded">+</button>
+                            </div>
+                            <div className="flex mt-4 space-x-2">
+                              <button onClick={() => handleRemove(book._id)} className="bg-red-500 text-white px-4 py-1 rounded">Remove</button>
+                              <button onClick={() => handleSaveForLater(book._id)} className="bg-teal-600 text-white px-4 py-1 rounded">Save for Later</button>
+                            </div>
+                          </div>
+                        </div>
+                      ) : null}
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+  
+            {savedBooks.length > 0 && (
+              <div className="mt-8">
+                <h1 className="text-3xl font-semibold mb-6">Saved for Later</h1>
+                <div className="space-y-6">
+                  {savedBooks.map((item) => {
+                    const book = item.book;
+                    return (
+                      <div key={item._id} className="bg-white p-4 rounded shadow-md flex flex-col">
+                        {book ? (
+                          <div className="flex items-start">
+                            <img
+                              src={book.url}
+                              alt={book.title}
+                              className="w-32 h-30 object-cover mr-4"
+                            />
+                            <div className="flex-grow">
+                              <h2 className="text-xl font-bold">{book.title}</h2>
+                              <p className="text-gray-700">By {book.author}</p>
+                              <p className="text-gray-600 mt-2">${(book.price || 0).toFixed(2)}</p>
+                              <button onClick={() => handleMoveToCart(book._id)} className="bg-orange-500 text-white px-4 py-1 rounded mt-6">Move to Cart</button>
+                            </div>
+                          </div>
+                        ) : null}
                       </div>
-                  </div>
-              )}
+                    );
+                  })}
+                </div>
+              </div>
+            )}
           </div>
           <div className="w-2/5">
-              <h1 className="text-3xl font-semibold mb-6">Order Summary</h1>
-              <div className="bg-white p-4 rounded shadow-md">
-                  <div className="border-b pb-2 mb-2">
-                      <h2 className="text-xl font-semibold mb-4">Items</h2>
-                      <div className="flex justify-between mb-2">
-                          <span>Total Items:</span>
-                          <span>{getTotalQuantity()}</span>
-                      </div>
-                  </div>
-                  <div className="flex justify-between font-bold text-lg mt-4">
-                      <span>Total Amount:</span>
-                      <span>${getTotalAmount().toFixed(2)}</span>
-                  </div>
-                  <button
-                      onClick={handlePlaceOrder}
-                      className="bg-blue-500 text-white px-4 py-2 rounded mt-4 w-full"
-                      disabled={cartBooks.length === 0}
-                  >
-                      Place Order
-                  </button>
+            <h1 className="text-3xl font-semibold mb-6">Order Summary</h1>
+            <div className="bg-white p-4 rounded shadow-md">
+              <div className="border-b pb-2 mb-2">
+                <h2 className="text-xl font-semibold mb-4">Items</h2>
+                <div className="flex justify-between mb-2">
+                  <span>Total Items:</span>
+                  <span>{getTotalQuantity()}</span>
+                </div>
               </div>
+              <div className="flex justify-between font-bold text-lg mt-4">
+                <span>Total Amount:</span>
+                <span>${getTotalAmount().toFixed(2)}</span>
+              </div>
+              <button
+                onClick={handlePlaceOrder}
+                className="bg-blue-500 text-white px-4 py-2 rounded mt-4 w-full"
+                disabled={cartBooks.length === 0}
+              >
+                Place Order
+              </button>
+            </div>
           </div>
+        </div>
       </div>
   );
   };

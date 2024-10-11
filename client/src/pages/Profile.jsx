@@ -9,12 +9,21 @@ import { FaUser } from 'react-icons/fa';
 const Profile = () => {
   const [user, setUser] = useState({});
   const [favorites, setFavorites] = useState([]);
-  const [activeTab, setActiveTab] = useState('favorites'); 
+  const [activeTab, setActiveTab] = useState(''); 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [orderHistory, setOrderHistory] = useState([]);
   const [cartItems, setCartItems] = useState([]);
   const [selectedUser, setSelectedUser] = useState(null);
+
+  const [newBook, setNewBook] = useState({
+    url: '',
+    title: '',
+    author: '',
+    price: '',
+    description: '',
+    language: '',
+  });
 
   const token = localStorage.getItem('token'); 
 
@@ -24,6 +33,14 @@ const Profile = () => {
     localStorage.removeItem('token');
     navigate('/');
   };
+
+  useEffect(() => {
+    if (user.role === 'admin') {
+      setActiveTab('addBook'); 
+    } else {
+      setActiveTab('favorites'); 
+    }
+  }, [user.role]);
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -396,11 +413,67 @@ const Profile = () => {
     setSelectedUser(null); 
   };
 
+  const handleAddBook = async (e) => {
+    e.preventDefault();
+
+    // prepare the data to send..
+    const bookData = {
+        url: newBook.url,  
+        title: newBook.title,
+        author: newBook.author,
+        price: newBook.price,
+        desc: newBook.description, 
+        language: newBook.language,
+    };
+
+    try {
+
+
+        const response = await fetch('http://localhost:2000/api/auth/add-books', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',  
+                Authorization: `Bearer ${token}`, 
+            },
+            body: JSON.stringify(bookData),  
+        });
+
+        if (!response.ok) {
+            const errorText = await response.text(); 
+            throw new Error(`Failed to add book: ${errorText}`);
+        }
+
+        alert('Book added successfully!');
+
+        setNewBook({
+            url: '',
+            title: '',
+            author: '',
+            price: '',
+            description: '',
+            language: '',
+        });
+    } catch (error) {
+        console.error('Error adding book:', error);
+        setError(error.message);
+    }
+};
+
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setNewBook((prevBook) => ({
+      ...prevBook,
+      [name]: value,
+    }));
+  };
+
+  
   
     return (
-      <div className="min-h-screen bg-gray-100 flex">
+      <div className="min-h-screen bg-gradient-to-r from-purple-200 via-blue-200 to-indigo-200 flex">
         {/* Sidebar */}
-        <div className="w-64 bg-white rounded-lg shadow-lg p-6 mt-10 ml-10 flex flex-col items-center h-fit">
+        <div className="w-64 bg-white rounded-lg shadow-lg p-6 mt-12 ml-10 flex flex-col items-center h-fit">
           <div className="text-center mb-8">
             <img src={avatar} alt="Avatar" className="w-20 h-20 rounded-full mb-4" />
             <h2 className="text-xl font-semibold">{user.username}</h2>
@@ -412,7 +485,7 @@ const Profile = () => {
                 Add Book
               </button>
               <button onClick={() => setActiveTab('seeingOrders')} className={`w-full text-left px-4 py-2 mb-4 ${activeTab === 'seeingOrders' ? 'bg-blue-100 text-blue-800' : 'text-gray-700'} hover:bg-blue-50 rounded`}>
-                Seeing Orders
+                Manage Orders
               </button>
             </>
           ) : (
@@ -439,7 +512,7 @@ const Profile = () => {
         </div>
   
         {/* Main Content */}
-        <div className="flex-grow p-6 mt-10">
+        <div className="flex-grow p-6 mt-6">
       
       
           {activeTab === 'favorites' && (
@@ -592,8 +665,8 @@ const Profile = () => {
           {/* manage order..admin*/}
 
           {activeTab === 'seeingOrders' && (
-  <div className="min-h-screen bg-gray-100 py-8 px-6 lg:px-12">
-    <h2 className="text-5xl font-semibold text-gray-500 mb-8 text-center text-gray-800 ml-15">All Orders</h2>
+  <div className="min-h-screen bg-white py-8 px-6 lg:px-12">
+    <h2 className="text-5xl font-semibold font-roboto text-gray-500 mb-8 text-center text-gray-800 ml-15">All Orders</h2>
     {orderHistory.length === 0 ? (
       <p className="text-gray-600 text-lg text-center">No orders found.</p>
     ) : (
@@ -689,16 +762,93 @@ const Profile = () => {
   </div>
 )}
 
-          {/* add books.. */}
-          {activeTab === 'addBook' && (
-            <div>
-              <h1 className="text-3xl font-bold mb-6">Add a New Book</h1>
-            </div>
-          )}
-        </div>
+         {/* add books.. */}
+{activeTab === 'addBook' && (
+  <div className="p-6 bg-white rounded-md shadow-md">
+    {/* <h1 className="text-3xl font-extrabold font-roboto mb-6">Add a New Book</h1> */}
+    <form onSubmit={handleAddBook} className="space-y-4">
+      <div>
+        <label className="block text-sm font-semibold text-gray-700">Title</label>
+        <input 
+          type="text" 
+          name="title"
+          placeholder="Enter book title" 
+          value={newBook.title} 
+          onChange={handleInputChange}
+          className="w-full p-2 border border-gray-300 rounded-md"
+          required
+        />
       </div>
-    );
-  };
+      <div>
+        <label className="block text-sm font-semibold text-gray-700">Author</label>
+        <input 
+          type="text" 
+          name="author"
+          placeholder="Enter author name" 
+          value={newBook.author} 
+          onChange={handleInputChange}
+          className="w-full p-2 border border-gray-300 rounded-md"
+          required
+        />
+      </div>
+      <div>
+        <label className="block text-sm font-semibold text-gray-700">Price</label>
+        <input 
+          type="number" 
+          name="price"
+          placeholder="Enter book price" 
+          value={newBook.price} 
+          onChange={handleInputChange}
+          className="w-full p-2 border border-gray-300 rounded-md"
+          required
+        />
+      </div>
+      <div>
+        <label className="block text-sm font-semibold text-gray-700">Description</label>
+        <textarea 
+          name="description"
+          placeholder="Enter book description" 
+          value={newBook.description} 
+          onChange={handleInputChange}
+          className="w-full p-2 border border-gray-300 rounded-md"
+          required
+        />
+      </div>
+      <div>
+        <label className="block text-sm font-semibold text-gray-700">Language</label>
+        <input 
+          type="text" 
+          name="language"
+          placeholder="Enter book language" 
+          value={newBook.language} 
+          onChange={handleInputChange}
+          className="w-full p-2 border border-gray-300 rounded-md"
+          required
+        />
+      </div>
+      <div>
+        <label className="block text-sm font-semibold text-gray-700">Image URL</label>
+        <input 
+          type="text" 
+          name="url"  
+          placeholder="Enter image URL"  
+          value={newBook.url} 
+          onChange={(e) => setNewBook({ ...newBook, url: e.target.value })} 
+          className="w-full p-2 border border-gray-300 rounded-md"
+          required
+        />
+      </div>
+      <button type="submit" className="px-4 py-2 bg-blue-600 text-white rounded-md">
+        Add Book
+      </button>
+    </form>
+    {error && <p className="text-red-500">{error}</p>}
+  </div>
+ )}
+  </div>
+ </div>
+  );
+ };
   
   export default Profile;
   

@@ -12,16 +12,15 @@ const BookCard = ({ book }) => {
   return (
    
     <div
-      className="relative w-72 h-[34rem] flex flex-col items-center overflow-hidden bg-white border border-gray-300 shadow-md
-                 transition-transform duration-300 ease-in-out hover:scale-105"
+      className="relative w-[16rem] h-[21rem] flex flex-col items-center overflow-hidden bg-white border border-gray-300 shadow-md transition-transform duration-300 ease-in-out hover:scale-105"
       onClick={handleClick}
     >
       
-      <div className="bg-white overflow-hidden rounded-t-lg">
+      <div className="rounded-t-lg mt-2"> 
         <img
           src={book.url}
           alt={book.title}
-          className="mt-6 w-3/10 h-full object-contain"
+          className="mt-6 w-full h-48 object-contain"
         />
       </div>
 

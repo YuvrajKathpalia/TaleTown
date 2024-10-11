@@ -71,7 +71,7 @@ export default function Favorites() {
   }
 
   return (
-    <div className="min-h-screen bg-white py-8 px-12">
+    <div className="min-h-screen bg-gradient-to-r from-purple-200 via-blue-200 to-indigo-200 py-8 px-12">
       <div className="text-center mb-12">
         <h1 className="text-4xl font-bold text-gray-800 mb-4">Your Favorite Books Await!</h1>
         <p className="text-lg text-gray-600">Explore your collection of favorite books.</p>
