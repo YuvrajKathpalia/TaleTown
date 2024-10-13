@@ -15,6 +15,11 @@ const Profile = () => {
   const [orderHistory, setOrderHistory] = useState([]);
   const [cartItems, setCartItems] = useState([]);
   const [selectedUser, setSelectedUser] = useState(null);
+  const [newUsername, setNewUsername] = useState('');
+  const [currentPassword, setCurrentPassword] = useState('');
+  const [newPassword, setNewPassword] = useState('');
+  const [newAddress, setNewAddress] = useState('');
+ 
 
   const [newBook, setNewBook] = useState({
     url: '',
@@ -64,6 +69,10 @@ const Profile = () => {
 
         const userData = await userResponse.json();
         setUser(userData);
+
+        setNewUsername(userData.username);
+        setNewAddress(userData.address);
+
       } catch (error) {
         console.error('Error fetching user data:', error);
         setError(error.message);
@@ -459,7 +468,6 @@ const Profile = () => {
     }
 };
 
-
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setNewBook((prevBook) => ({
@@ -468,7 +476,85 @@ const Profile = () => {
     }));
   };
 
+  const handleChangeUsername = async (e) => {
+  e.preventDefault();
+
+  try {
+    const response = await fetch('http://localhost:2000/api/auth/change-username', {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({ username: newUsername }),
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to update username');
+    }
+
+
+    
+    setUser((prevUser) => ({ ...prevUser, username: newUsername })); // Update local state
+    alert('Username updated successfully!'); 
+  } catch (error) {
+    console.error('Error updating username:', error);
+ 
+  }
+};
   
+  const handleUpdateAddress = async (e) => {
+    e.preventDefault();
+
+    try {
+      const response = await fetch('http://localhost:2000/api/auth/update-address', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ address: newAddress }),
+      });
+
+      if (response.ok) {
+        alert("Address updated successfully");
+      } else {
+        alert("Failed to update address");
+      }
+    } catch (error) {
+      console.error("Error updating address:", error);
+      alert("An error occurred while updating address");
+    }
+  };
+
+  
+
+  const handleChangePassword = async (e) => {
+    e.preventDefault();
+
+    try {
+      const response = await fetch('http://localhost:2000/api/auth/change-password', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ currentPassword, newPassword }),
+      });
+
+      if (response.ok) {
+        alert("Password updated successfully");
+        setCurrentPassword(''); 
+        setNewPassword(''); 
+      } else {
+        alert("Failed to update password");
+      }
+    } catch (error) {
+      console.error("Error updating password:", error);
+      alert("An error occurred while updating password");
+    }
+  };
+
   
     return (
       <div className="min-h-screen bg-gradient-to-r from-purple-200 via-blue-200 to-indigo-200 flex">
@@ -656,12 +742,107 @@ const Profile = () => {
 
           {/* settings */}
           {activeTab === 'settings' && (
-            <div className="min-h-screen bg-white py-8 px-12">
-              <h3 className="text-xl font-semibold">Settings</h3>
-    
-            </div>
-          )}
-  
+  <div className="min-h-screen bg-white py-10">
+    <div className="max-w-4xl mx-10">
+
+     
+      <div className="mb-6">
+        <form onSubmit={handleChangeUsername}>
+          <div className="mb-4">
+            <label className="block text-sm font-medium text-black" htmlFor="username">
+              Username
+            </label>
+            <input
+              id="username"
+              type="text"
+              className="w-full p-3 border border-blue-300 rounded-lg focus:outline-none focus:border-blue-500"
+              value={newUsername} 
+              onChange={(e) => setNewUsername(e.target.value)} 
+              placeholder="Enter your new username"
+            />
+          </div>
+          <button
+            type="submit"
+            className="px-6 py-3 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition duration-300"
+          >
+            Update Username
+          </button>
+        </form>
+      </div>
+
+      <div className="mb-8 border-b pb-6">
+        <form onSubmit={handleUpdateAddress}>
+          <div className="mb-4">
+            <label className="block text-sm font-medium text-black" htmlFor="address">
+              Address
+            </label>
+            <textarea
+              id="address"
+              className="w-full p-3 border border-blue-300 rounded-lg focus:outline-none focus:border-blue-500"
+              value={newAddress} 
+              onChange={(e) => setNewAddress(e.target.value)} 
+              placeholder="Enter your new address"
+            ></textarea>
+          </div>
+          <button
+            type="submit"
+            className="px-6 py-3 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition duration-300"
+          >
+            Update Address
+          </button>
+        </form>
+      </div>
+
+      <div className="mb-8 border-b pb-6">
+        <h4 className="text-xl font-semibold mb-4 text-black">Change Password</h4>
+        <form onSubmit={handleChangePassword}>
+          <div className="mb-4">
+            <label className="block text-sm font-medium text-black" htmlFor="current-password">
+              Current Password
+            </label>
+            <input
+              id="current-password"
+              type="password"
+              className="w-full p-3 border border-green-300 rounded-lg focus:outline-none focus:border-green-500"
+              value={currentPassword}
+              onChange={(e) => setCurrentPassword(e.target.value)}
+              placeholder="Enter your current password"
+            />
+          </div>
+          <div className="mb-4">
+            <label className="block text-sm font-medium text-black" htmlFor="new-password">
+              New Password
+            </label>
+            <input
+              id="new-password"
+              type="password"
+              className="w-full p-3 border border-green-300 rounded-lg focus:outline-none focus:border-green-500"
+              value={newPassword}
+              onChange={(e) => setNewPassword(e.target.value)}
+              placeholder="Enter your new password"
+            />
+          </div>
+          <button
+            type="submit"
+            className="px-6 py-3 bg-green-600 text-white font-medium rounded-lg hover:bg-green-700 transition duration-300"
+          >
+            Update Password
+          </button>
+        </form>
+      </div>
+
+      <div>
+        <button
+          onClick={handleLogout}
+          className="px-6 py-3 bg-red-600 text-white font-medium rounded-lg hover:bg-red-700 transition duration-300"
+        >
+          Logout
+        </button>
+      </div>
+    </div>
+  </div>
+)}
+
           {/* manage order..admin*/}
 
           {activeTab === 'seeingOrders' && (

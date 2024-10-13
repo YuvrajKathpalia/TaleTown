@@ -134,5 +134,46 @@ router.put("/update-address", authenticateToken, async (req, res) => {
   }
 });
 
+router.put("/change-username", authenticateToken, async (req, res) => {
+  const { username } = req.body;
+  const userId = req.user.id;
+
+  try {
+    
+    let userWithUsername = await User.findOne({ username });
+    if (userWithUsername) {
+      return res.status(400).json({ msg: 'Username already exists' });
+    }
+
+    await User.findByIdAndUpdate(userId, { username });
+    return res.status(200).json({ message: "Username updated successfully" });
+
+  } catch (error) {
+    console.error("Error updating username:", error);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+});
+
+
+router.put("/change-password", authenticateToken, async (req, res) => {
+  const { currentPassword, newPassword } = req.body;
+  const userId = req.user.id;
+
+  try {
+    const user = await User.findById(userId);
+    const isMatch = await bcrypt.compare(currentPassword, user.password);
+    if (!isMatch) return res.status(400).json({ message: "Incorrect current password" });
+
+    const salt = await bcrypt.genSalt(10);
+    user.password = await bcrypt.hash(newPassword, salt);
+    await user.save();
+
+    return res.status(200).json({ message: "Password updated successfully" });
+  } catch (error) {
+    console.error("Error updating password:", error);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+});
+
 
 module.exports = router;
