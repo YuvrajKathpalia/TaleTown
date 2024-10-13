@@ -32,7 +32,14 @@ const RecentBooks = () => {
 
   return (
     <div className="p-8">
-      <h2 className="text-3xl font-bold mb-6 text-blue-500 ml-5">Recently Added Books</h2>
+      
+      <div className="flex justify-center mb-12">
+        <img 
+          src="https://see.fontimg.com/api/rf5/BOrl/YTdkZTNkMmNlM2I1NDc5Y2EyM2YzMGZhZjRmYTUzNDQudHRm/TmV3IEFycml2YWxz/kg-ten-thousand-reasons-alt.png?r=fs&h=81&w=1250&fg=000000&bg=FFFFFF&s=65"
+          alt="New Arrivals" 
+          className="w-[25rem] h-[5rem]" 
+        />
+      </div>
 
       {loading && (
         <div className="flex items-center justify-center min-h-[200px]">
