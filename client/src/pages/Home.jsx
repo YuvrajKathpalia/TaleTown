@@ -1,8 +1,18 @@
 import React from 'react';
 import heroImage from "../assets/images/four.webp"; 
 import RecentBooks from '../components/RecentBooks';
+import { useNavigate } from 'react-router-dom';
+
 
 const Home = () => {
+
+  
+const navigate = useNavigate();
+
+const handleExploreNowClick = () => {
+    navigate('/books');
+  };
+  
   return (
     <div>
     <div
@@ -21,7 +31,9 @@ const Home = () => {
         <p className="text-xl mb-6 font-openSans">
           Explore a vibrant collection of books at TaleTown. From timeless classics to modern gems, our library has something for every reader.
         </p>
-        <button className="px-6 py-3 bg-blue-500 text-white font-semibold rounded-md shadow-lg hover:bg-blue-600 transition-all duration-300">
+        <button
+        onClick={handleExploreNowClick} 
+        className="px-6 py-3 bg-blue-500 text-white font-semibold rounded-md shadow-lg hover:bg-blue-600 transition-all duration-300">
           Explore Now
         </button>
       </div>
