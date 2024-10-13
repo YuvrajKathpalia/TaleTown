@@ -18,26 +18,18 @@ const Navbar = () => {
     <nav className="bg-white p-4 shadow">
       <div className="flex items-center">
      
-        <div className="pl-16 text-4xl font-serif font-bold text-gray-800">
+        <div className="pl-16 text-5xl font-serif font-bold text-gray-800">
           TaleTown
         </div>
 
     
-        <ul className="flex space-x-12 ml-24">
+        <ul className="flex space-x-10 ml-16">
           <li>
             <NavLink 
               to="/" 
               className={({ isActive }) => isActive ? 'text-blue-500' : 'text-gray-700'}
             >
               Home
-            </NavLink>
-          </li>
-          <li>
-            <NavLink 
-              to="/about" 
-              className={({ isActive }) => isActive ? 'text-blue-500' : 'text-gray-700'}
-            >
-              About Us
             </NavLink>
           </li>
           <li>
@@ -58,7 +50,7 @@ const Navbar = () => {
           />
         </div>
 
-        <div className="ml-8 flex items-center space-x-8 pr-16">
+        <div className="ml-8 flex items-center space-x-6 pr-12">
        
           <NavLink 
             to="/favorites" 
