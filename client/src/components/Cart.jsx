@@ -150,60 +150,130 @@
       }
     };
 
+
     const handlePlaceOrder = async () => {
+      // Check if the cart is empty
       if (cartBooks.length === 0) {
-        alert('Your cart is empty. Please add items to your cart before placing an order.');
-        return;
+          alert('Your cart is empty. Please add items to your cart before placing an order.');
+          return;
       }
-    
+  
+      if (!token) {
+          alert('You need to be logged in to place an order.');
+          return;
+      }
+  
+      // Create order data with calculated total
+      const totalAmount = Math.round(getTotalAmount() * 100); // Total in paise
       const orderData = {
-        orders: cartBooks.map((item) => ({
-          book: item.book._id,
-          quantity: item.quantity,
-          price: item.price,
-        })),
-        total: getTotalAmount(), 
+          orders: cartBooks.map((item) => ({
+              book: item.book._id,
+              quantity: item.quantity,
+              price: item.price,
+          })),
+          total: totalAmount, 
       };
-    
-      try {
-        const response = await fetch('http://localhost:2000/api/auth/place-order', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify(orderData),
-        });
-    
-        if (!response.ok) {
-          const errorData = await response.json();
-          throw new Error(`Failed to place order: ${errorData.message}`);
-        }
-    
-        // Clear cart from the backend after placing the order
-        const clearResponse = await fetch('http://localhost:2000/api/auth/clear-cart', {
-          method: 'DELETE', 
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`,
-          },
-        });
-    
-        if (!clearResponse.ok) {
-          const errorData = await clearResponse.json();
-          throw new Error(`Failed to clear cart: ${errorData.message}`);
-        }
-    
-        const data = await response.json();
-        console.log('Order placed successfully:', data);
-    
-        alert('Order placed successfully!');
-        setCartBooks([]); // Clear the frontend cart state
+  
+      try {      
+          const response = await fetch('http://localhost:2000/api/auth/place-order', {
+              method: 'POST',
+              headers: {
+                  'Content-Type': 'application/json',
+                  Authorization: `Bearer ${token}`,
+              },
+              body: JSON.stringify(orderData),
+          });
+  
+          if (!response.ok) {
+              const errorData = await response.json();
+              throw new Error(`Failed to place order: ${errorData.message}`);
+          }
+  
+          const order = await response.json(); 
+          console.log('Order placed successfully:', order);
+  
+          // Razorpay options.
+          const options = {
+              key: import.meta.env.VITE_RAZORPAY_KEY, 
+              amount: order.total, 
+              currency: 'INR',
+              name: 'TaleTown',
+              description: 'Purchase of books',
+              order_id: order.razorpayOrderId, // Razorpay order ID received from the backend..
+              handler: async function (response) {
+                  console.log('Payment response:', response); // Log the payment response..
+  
+                  // Handle successful payment verification
+                  try {
+                      // Fetch the validation response..
+                      const validateRes = await fetch('http://localhost:2000/api/auth/validate-order', {
+                          method: 'POST',
+                          headers: {
+                              'Content-Type': 'application/json',
+                              Authorization: `Bearer ${token}`,
+                          },
+                          body: JSON.stringify({
+                              razorpay_order_id: response.razorpay_order_id,
+                              razorpay_payment_id: response.razorpay_payment_id,
+                              razorpay_signature: response.razorpay_signature,
+                          }),
+                      });
+  
+                      if (!validateRes.ok) {
+                          const errorData = await validateRes.json();
+                          throw new Error(`Payment verification failed: ${errorData.message}`);
+                      }
+  
+                      const result = await validateRes.json();
+                      console.log('Payment verification result:', result);
+  
+                      if (result.msg === 'success') {
+                          alert('Payment Successful!');
+  
+                          // Clear cart from the backend after placing the order
+                          const clearResponse = await fetch('http://localhost:2000/api/auth/clear-cart', {
+                              method: 'DELETE',
+                              headers: {
+                                  'Content-Type': 'application/json',
+                                  Authorization: `Bearer ${token}`,
+                              },
+                          });
+  
+                          if (!clearResponse.ok) {
+                              const errorData = await clearResponse.json();
+                              throw new Error(`Failed to clear cart: ${errorData.message}`);
+                          }
+  
+                          const clearCartResult = await clearResponse.json();
+                          console.log('Cart cleared:', clearCartResult);
+  
+                        
+                          setCartBooks([]);  //also manage state on frontend
+                      }
+                  } catch (error) {
+                      console.error('Error in payment verification:', error);
+                      alert('An error occurred during payment verification. Please try again.');
+                  }
+              },
+              prefill: {
+                  name: 'user',
+                  email: 'user@example.com',
+                  contact: '9999999999',
+              },
+              theme: {
+                  color: '#9d66f0',
+              },
+          };
+  
+          // Create a new Razorpay instance and open the payment modal
+          const razorpay = new window.Razorpay(options);
+          razorpay.open();
       } catch (error) {
-        console.error('Error placing order:', error);
-        setError(error.message);
+          console.error('Error placing order:', error);
+          alert(error.message); 
       }
-    };
+  };
+
 
     const handleSaveForLater = async (bookId) => {
       const bookToSave = cartBooks.find((book) => book.book._id === bookId);
