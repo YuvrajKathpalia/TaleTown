@@ -720,14 +720,18 @@ const Profile = () => {
                 Order placed on <span className="text-gray-600">{new Date(order.createdAt).toLocaleDateString()}</span>
               </h3>
               {order.orders.map((item) => (
-                <div key={item.book._id} className="flex justify-between items-center mb-4 border-b border-gray-300 pb-2">
-                  <div>
-                    <p className="text-md font-semibold">{item.book.title}</p>
-                    <p className="text-sm text-gray-600">By {item.book.author}</p>
-                    <p className="text-sm text-gray-600">Price: ${item.price.toFixed(2)}</p>
-                    <p className="text-sm text-gray-600">Quantity: {item.quantity}</p>
-                  </div>
-                </div>
+                 <div key={item.book?._id || item._id} className="flex justify-between items-center mb-4 border-b border-gray-300 pb-2">
+                 {item.book ? (
+                   <div>
+                     <p className="text-md font-semibold">{item.book.title}</p>
+                     <p className="text-sm text-gray-600">By {item.book.author}</p>
+                     <p className="text-sm text-gray-600">Price: ${item.price.toFixed(2)}</p>
+                     <p className="text-sm text-gray-600">Quantity: {item.quantity}</p>
+                   </div>
+                 ) : (
+                   <p className="text-md font-semibold text-red-500">This book is no longer available.</p>
+                 )}
+               </div>
               ))}
               <p className="text-lg font-semibold mt-2">
                 Total Amount: <span className="text-blue-600">${totalAmount.toFixed(2)}</span>
@@ -885,12 +889,16 @@ const Profile = () => {
                 </thead>
                 <tbody>
                   {order.orders.map((item) => (
-                    <tr key={item.book._id}>
-                      <td className="p-2 border border-gray-300">{item.book.title}</td>
-                      <td className="p-2 border border-gray-300">{item.book.author}</td>
-                      <td className="p-2 border border-gray-300">${item.price.toFixed(2)}</td>
-                      <td className="p-2 border border-gray-300">{item.quantity}</td>
-                    </tr>
+                    <tr key={item.book?._id || item._id}>
+                    <td className="p-2 border border-gray-300">
+                      {item.book ? item.book.title : <span className="text-red-500">Book not available</span>}
+                    </td>
+                    <td className="p-2 border border-gray-300">
+                      {item.book ? item.book.author : <span className="text-red-500">N/A</span>}
+                    </td>
+                    <td className="p-2 border border-gray-300">${item.price.toFixed(2)}</td>
+                    <td className="p-2 border border-gray-300">{item.quantity}</td>
+                  </tr>
                   ))}
                 </tbody>
               </table>
