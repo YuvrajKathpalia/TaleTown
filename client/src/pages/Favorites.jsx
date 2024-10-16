@@ -79,7 +79,10 @@ export default function Favorites() {
       
       <div className="grid gap-16 grid-cols-auto-fit sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 justify-items-center">
         {favorites.map((book) => (
-          <div key={book._id} className="relative w-72 h-[22rem] flex flex-col items-center overflow-hidden bg-white border border-gray-300 shadow-md transition-transform duration-300 ease-in-out hover:scale-105">
+          <div
+            key={book._id}
+            className="relative w-72 h-[22rem] flex flex-col items-center overflow-hidden bg-white border border-gray-300 rounded-lg transition-all duration-300 ease-in-out hover:scale-105 hover:shadow-xl"
+          >
             <Link
               to={`/get-book-details/${book._id}`}
               className="bg-white overflow-hidden rounded-t-lg flex-grow"
@@ -87,12 +90,18 @@ export default function Favorites() {
               <img
                 src={book.url}
                 alt={book.title}
-                className="mt-6 w-full h-48 object-contain"
+                className="mt-6 w-full h-48 object-contain transition-transform duration-300 ease-in-out hover:scale-110"
               />
               <div className="p-4 flex flex-col h-1/3">
-                <h3 className="text-lg font-semibold mb-1 truncate">{book.title}</h3>
-                <p className="text-gray-700 italic mb-1 truncate">By {book.author}</p>
-                <p className="text-gray-600">{book.price ? `$${book.price}` : 'Price not available'}</p>
+                <h3 className="text-lg font-semibold mb-1 truncate hover:text-purple-500 transition-colors duration-300">
+                  {book.title}
+                </h3>
+                <p className="text-gray-700 italic mb-1 truncate hover:text-purple-400 transition-colors duration-300">
+                  By {book.author}
+                </p>
+                <p className="text-gray-600 font-medium hover:text-gray-800 transition-colors duration-300">
+                  {book.price ? `$${book.price}` : 'Price not available'}
+                </p>
               </div>
             </Link>
             <button
@@ -100,7 +109,7 @@ export default function Favorites() {
                 e.preventDefault();
                 handleRemoveFromFavorites(book._id);
               }}
-              className="absolute top-2 right-2 text-red-500 hover:text-red-700"
+              className="absolute top-2 right-2 text-red-500 hover:text-red-700 transition-colors duration-300 ease-in-out"
             >
               <FontAwesomeIcon icon={faHeart} className="text-2xl" />
             </button>
@@ -109,4 +118,5 @@ export default function Favorites() {
       </div>
     </div>
   );
+  
 }
