@@ -39,13 +39,13 @@ router.post('/add-books', authenticateToken, async (req, res) => {
 
 router.put('/update-book/:id', authenticateToken, async (req, res) => {
     const { id } = req.params; 
-    const { url, title, author, price, desc, language } = req.body; 
+    const { url, title, author, price, description, language } = req.body; 
   
     try {
     
       const updatedBook = await Book.findByIdAndUpdate(
         id,
-        { url, title, author, price, desc, language },
+        { url, title, author, price, description, language },
         { new: true, runValidators: true } 
       );
   
