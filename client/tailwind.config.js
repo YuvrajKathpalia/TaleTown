@@ -10,6 +10,7 @@ export default {
         roboto: ['Roboto', 'sans-serif'],
         openSans: ['Open Sans', 'sans-serif'],
         merriweatherSans: ['Merriweather Sans', 'sans-serif'],
+        afacadFlux: ['Afacad Flux', 'sans-serif'],
         
       },
     },
