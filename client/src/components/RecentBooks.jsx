@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import BookCard from '../components/BookCard'; 
-import loader from '../assets/images/loader.gif'
+import loader from '../assets/images/26.gif'
 
 const RecentBooks = () => {
   const [books, setBooks] = useState([]);

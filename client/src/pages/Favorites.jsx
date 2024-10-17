@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHeart } from '@fortawesome/free-solid-svg-icons';
+import loader from '../assets/images/loader.gif'; 
 
 export default function Favorites() {
   const [favorites, setFavorites] = useState([]);
@@ -62,14 +63,24 @@ export default function Favorites() {
     }
   };
 
+  // Loader and error handling
   if (loading) {
-    return <div className="flex items-center justify-center min-h-screen">Loading...</div>;
+    return (
+      <div className="min-h-screen bg-gradient-to-r from-purple-200 via-blue-200 to-indigo-200 flex items-center justify-center">
+        <img src={loader} alt="Loading..." className="w-16 h-16" /> 
+      </div>
+    );
   }
 
   if (error) {
-    return <div className="flex items-center justify-center min-h-screen text-red-500">Error: {error}</div>;
+    return (
+      <div className="min-h-screen bg-gradient-to-r from-purple-200 via-blue-200 to-indigo-200 flex items-center justify-center text-red-700 font-bold text-2xl">
+        Error: {error}
+      </div>
+    );
   }
 
+  // Main content rendering
   return (
     <div className="min-h-screen bg-gradient-to-r from-purple-200 via-blue-200 to-indigo-200 py-8 px-12">
       <div className="text-center mb-12">
@@ -118,5 +129,4 @@ export default function Favorites() {
       </div>
     </div>
   );
-  
 }

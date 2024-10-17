@@ -1,5 +1,6 @@
   import React, { useEffect, useState } from 'react';
   import { useNavigate } from 'react-router-dom';
+  import loader from '../assets/images/loader.gif'; 
 
   const Cart = () => {
     const [cartBooks, setCartBooks] = useState([]);
@@ -339,13 +340,22 @@
   };
 
 
-    if (loading) {
-      return <div>Loading...</div>;
-    }
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-r from-purple-200 via-blue-200 to-indigo-200 flex items-center justify-center">
+        <img src={loader} alt="Loading..." className="w-16 h-16" /> 
+      </div>
+    );
+  }
 
-    if (error) {
-      return <div>Error: {error}</div>;
-    }
+  if (error) {
+    return (
+      <div className="min-h-screen bg-gradient-to-r from-purple-200 via-blue-200 to-indigo-200 flex items-center justify-center text-red-700 font-bold text-2xl">
+        Error: {error}
+      </div>
+    );
+  }
+
 
     return (
       <div className="min-h-screen bg-gradient-to-r from-purple-200 via-blue-200 to-indigo-200 p-8">

@@ -5,6 +5,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faRightFromBracket } from '@fortawesome/free-solid-svg-icons';
 import { faHeart } from '@fortawesome/free-solid-svg-icons';
 import { FaUser } from 'react-icons/fa';
+import loader from '../assets/images/loader.gif'; 
+
 
 const Profile = () => {
   const [user, setUser] = useState({});
@@ -379,14 +381,6 @@ const Profile = () => {
     return cartItems.reduce((total, item) => total + item.quantity, 0);
   };
 
-  if (loading) {
-    return <div>Loading...</div>;
-  }
-
-  if (error) {
-    return <div>Error: {error}</div>;
-  }
-
   const handleStatusChange = async (orderId, newStatus) => {
     try {
       const response = await fetch(`http://localhost:2000/api/auth/update-status/${orderId}`, {
@@ -554,6 +548,24 @@ const Profile = () => {
       alert("An error occurred while updating password");
     }
   };
+
+  // Loader and error handling
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-r from-purple-200 via-blue-200 to-indigo-200 flex items-center justify-center">
+        <img src={loader} alt="Loading..." className="w-16 h-16" /> 
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen bg-gradient-to-r from-purple-200 via-blue-200 to-indigo-200 flex items-center justify-center text-red-700 font-bold text-2xl">
+        Error: {error}
+      </div>
+    );
+  }
+
 
   
     return (
