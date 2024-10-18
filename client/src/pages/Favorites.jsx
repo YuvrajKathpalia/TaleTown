@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHeart } from '@fortawesome/free-solid-svg-icons';
 import loader from '../assets/images/loader.gif'; 
@@ -8,10 +8,16 @@ export default function Favorites() {
   const [favorites, setFavorites] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
-
   const token = localStorage.getItem('token');
+  const navigate = useNavigate();  
 
+ 
   useEffect(() => {
+
+    if (!token) {
+      navigate('/signin');
+      return;
+    }
     const fetchFavorites = async () => {
       try {
         const response = await fetch('http://localhost:2000/api/auth/get-favourite-books', {
@@ -74,20 +80,24 @@ export default function Favorites() {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-gradient-to-r from-purple-200 via-blue-200 to-indigo-200 flex items-center justify-center text-red-700 font-bold text-2xl">
-        Error: {error}
+      <div className="min-h-screen bg-gradient-to-r from-purple-300 via-blue-400 to-indigo-500 flex items-center justify-center">
+        <div className="text-center">
+          <p className="text-white font-bold text-3xl mb-4">
+            The server is currently unavailable, Please try again later.
+          </p>
+        </div>
       </div>
     );
   }
 
   // Main content rendering
   return (
-    <div className="min-h-screen bg-gradient-to-r from-purple-200 via-blue-200 to-indigo-200 py-8 px-12">
+    <div className="min-h-screen bg-gradient-to-r from-purple-300 via-blue-300 to-indigo-200 py-8 px-12">
       <div className="text-center mb-12">
-        <h1 className="text-4xl font-bold text-gray-800 mb-4">Your Favorite Books Await!</h1>
-        <p className="text-lg text-gray-600">Explore your collection of favorite books.</p>
+        <h1 className="text-4xl font-bold text-gray-900 mb-4">Your Favorite Books Await!</h1>
+        <p className="text-lg text-gray-800">Explore your collection of favorite books.</p>
       </div>
-      
+
       <div className="grid gap-16 grid-cols-auto-fit sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 justify-items-center">
         {favorites.map((book) => (
           <div

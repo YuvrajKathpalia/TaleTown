@@ -350,18 +350,22 @@
 
   if (error) {
     return (
-      <div className="min-h-screen bg-gradient-to-r from-purple-200 via-blue-200 to-indigo-200 flex items-center justify-center text-red-700 font-bold text-2xl">
-        Error: {error}
+      <div className="min-h-screen bg-gradient-to-r from-purple-200 via-blue-200 to-indigo-200 flex items-center justify-center">
+        <div className="text-center">
+          <p className="text-red-600 font-bold text-2xl mb-4">
+            The server is currently unavailable, Please try again later.
+          </p>
+        </div>
       </div>
     );
-  }
+  }  
 
 
     return (
-      <div className="min-h-screen bg-gradient-to-r from-purple-200 via-blue-200 to-indigo-200 p-8">
+      <div className="min-h-screen bg-gradient-to-r from-purple-300 via-blue-300 to-indigo-200 p-8">
         <div className="flex">
           <div className="w-3/5 pr-6">
-            <h1 className="text-3xl font-semibold mb-6">Your Cart</h1>
+            <h1 className="text-4xl text-gray-800 font-sans-serif font-semibold mb-8">Your Cart</h1>
             {cartBooks.length === 0 ? (
               <p>Your cart is empty.</p>
             ) : (
@@ -401,7 +405,7 @@
   
             {savedBooks.length > 0 && (
               <div className="mt-8">
-                <h1 className="text-3xl font-semibold mb-6">Saved for Later</h1>
+                <h1 className="text-3xl text-gray-800 font-sans-serif font-semibold mb-6">Saved for Later</h1>
                 <div className="space-y-6">
                   {savedBooks.map((item) => {
                     const book = item.book;
@@ -430,7 +434,7 @@
             )}
           </div>
           <div className="w-2/5">
-            <h1 className="text-3xl font-semibold mb-6">Order Summary</h1>
+            <h1 className="text-4xl text-gray-800 font-sans-serif font-semibold mb-8">Order Summary</h1>
             <div className="bg-white p-4 rounded shadow-md">
               <div className="border-b pb-2 mb-2">
                 <h2 className="text-xl font-semibold mb-4">Items</h2>

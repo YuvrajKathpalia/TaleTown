@@ -28,7 +28,7 @@ const Books = () => {
   }, []);
 
   return (
-    <div className="min-h-screen p-8 bg-gradient-to-r from-purple-200 via-blue-200 to-indigo-200 flex flex-col">
+    <div className="min-h-screen p-8 bg-gradient-to-r from-purple-300 via-blue-300 to-indigo-200 flex flex-col">
 
       {loading && (
         <div className="flex items-center justify-center flex-grow">

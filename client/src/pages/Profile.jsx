@@ -569,7 +569,7 @@ const Profile = () => {
 
   
     return (
-      <div className="min-h-screen bg-gradient-to-r from-purple-200 via-blue-200 to-indigo-200 flex">
+      <div className="min-h-screen bg-gradient-to-r from-purple-300 via-blue-300 to-indigo-200 flex">
         {/* Sidebar */}
         <div className="w-64 bg-white rounded-lg shadow-lg p-6 mt-12 ml-10 flex flex-col items-center h-fit">
           <div className="text-center mb-8">
@@ -696,7 +696,7 @@ const Profile = () => {
                       </div>
                     </div>
                   ))}
-                  <div className="flex flex-col lg:flex-row justify-between items-center mt-8 border-t border-gray-300 pt-6 bg-gray-50 p-4 rounded-lg shadow-sm">
+                  <div className="flex flex-col lg:flex-row justify-between items-center mt-8 border-t border-gray-300 pt-6  p-4 rounded-lg shadow-sm">
                     <div className="text-lg font-semibold text-gray-800 mb-4 lg:mb-0">
                       <span className="text-gray-600">Total Quantity:</span> {getTotalQuantity()}
                     </div>
@@ -717,7 +717,7 @@ const Profile = () => {
   
   {activeTab === 'orders' && (
   <div className="min-h-screen bg-white py-8 px-12">
-    <h2 className="text-3xl font-bold mb-6">Order History</h2>
+    <h2 className="text-3xl font-sans-serif font-bold mb-6">Order History</h2>
     {orderHistory.length === 0 ? (
       <p className="text-gray-600 text-lg">No orders found.</p>
     ) : (
@@ -727,7 +727,7 @@ const Profile = () => {
           const totalAmount = order.orders.reduce((total, item) => total + (item.price * item.quantity), 0);
 
           return (
-            <div key={order._id} className="bg-gray-50 p-6 rounded-lg shadow-md border border-gray-200">
+            <div key={order._id} className="bg-white p-6 rounded-lg shadow-md border border-gray-200">
               <h3 className="text-lg font-semibold mb-2">
                 Order placed on <span className="text-gray-600">{new Date(order.createdAt).toLocaleDateString()}</span>
               </h3>
@@ -771,7 +771,7 @@ const Profile = () => {
             <input
               id="username"
               type="text"
-              className="w-full p-3 border border-blue-300 rounded-lg focus:outline-none focus:border-blue-500"
+              className="mt-2 w-full p-3 border border-blue-300 rounded-lg focus:outline-none focus:border-blue-500"
               value={newUsername} 
               onChange={(e) => setNewUsername(e.target.value)} 
               placeholder="Enter your new username"
@@ -794,7 +794,7 @@ const Profile = () => {
             </label>
             <textarea
               id="address"
-              className="w-full p-3 border border-blue-300 rounded-lg focus:outline-none focus:border-blue-500"
+              className="mt-2 w-full p-3 border border-blue-300 rounded-lg focus:outline-none focus:border-blue-500"
               value={newAddress} 
               onChange={(e) => setNewAddress(e.target.value)} 
               placeholder="Enter your new address"
@@ -819,7 +819,7 @@ const Profile = () => {
             <input
               id="current-password"
               type="password"
-              className="w-full p-3 border border-green-300 rounded-lg focus:outline-none focus:border-green-500"
+              className="mt-2 w-full p-3 border border-blue-300 rounded-lg focus:outline-none focus:border-blue-500"
               value={currentPassword}
               onChange={(e) => setCurrentPassword(e.target.value)}
               placeholder="Enter your current password"
@@ -832,7 +832,7 @@ const Profile = () => {
             <input
               id="new-password"
               type="password"
-              className="w-full p-3 border border-green-300 rounded-lg focus:outline-none focus:border-green-500"
+              className="mt-2 w-full p-3 border border-blue-300 rounded-lg focus:outline-none focus:border-blue-500"
               value={newPassword}
               onChange={(e) => setNewPassword(e.target.value)}
               placeholder="Enter your new password"
@@ -840,7 +840,7 @@ const Profile = () => {
           </div>
           <button
             type="submit"
-            className="px-6 py-3 bg-green-600 text-white font-medium rounded-lg hover:bg-green-700 transition duration-300"
+            className="px-6 py-3 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition duration-300"
           >
             Update Password
           </button>
