@@ -51,15 +51,15 @@ const SignUp = ({ onClose }) => {
   };
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50">
-      <div className="bg-white p-8 rounded-lg shadow-lg max-w-md w-full relative">
+    <div className="fixed inset-0 flex items-center justify-center bg-gradient-to-r from-purple-300 via-indigo-400 to-indigo-400">
+      <div className="bg-white p-8 rounded-lg shadow-lg max-w-md w-full relative border border-gray-300">
         <button
-          className="absolute top-4 right-4 text-gray-600 hover:text-gray-900"
+          className="absolute top-4 right-4 text-gray-600 hover:text-gray-900 transition duration-200"
           onClick={handleClose}
         >
           &times;
         </button>
-        <h2 className="text-2xl font-bold mb-4">Sign Up</h2>
+        <h2 className="text-3xl font-extrabold font-roboto mb-6 text-center text-stone-600">Sign Up</h2>
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
             <label htmlFor="username" className="block text-sm font-medium text-gray-700">Username</label>
@@ -69,7 +69,7 @@ const SignUp = ({ onClose }) => {
               name="username"
               value={formData.username}
               onChange={handleChange}
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 sm:text-sm transition duration-200"
               required
             />
           </div>
@@ -81,7 +81,7 @@ const SignUp = ({ onClose }) => {
               name="email"
               value={formData.email}
               onChange={handleChange}
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 sm:text-sm transition duration-200"
               required
             />
           </div>
@@ -93,7 +93,7 @@ const SignUp = ({ onClose }) => {
               name="password"
               value={formData.password}
               onChange={handleChange}
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 sm:text-sm transition duration-200"
               required
             />
           </div>
@@ -105,7 +105,7 @@ const SignUp = ({ onClose }) => {
               name="address"
               value={formData.address}
               onChange={handleChange}
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 sm:text-sm transition duration-200"
             />
           </div>
           <button
@@ -114,11 +114,11 @@ const SignUp = ({ onClose }) => {
           >
             Sign Up
           </button>
-          {error && <p className="mt-4 text-red-500">{error}</p>}
+          {error && <p className="mt-4 text-red-500 text-center">{error}</p>}
         </form>
       </div>
     </div>
-  );
+  );  
 };
 
 export default SignUp;
